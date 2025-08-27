@@ -17,22 +17,22 @@ def menu():
     --> '''
     return input(menu)
 
-def depositar(valor, saldo):
+def depositar(valor, saldo, lista_extrato):
     if valor > 0:
         saldo += valor
-        extrato = guardar_extrato(extrato= f'Depositado R${valor:.2f}')
+        extrato = guardar_extrato(lista_extrato, extrato= f'Depositado R${valor:.2f}')
 
         return saldo, extrato
     else:
         return 'Valor abaixo de 0!!'
 
-def sacar(*, valor, saldo, limite, numero_saques):
+def sacar(*, valor, saldo, limite, numero_saques, lista_extrato):
     if saldo < valor:
-        print( '----ERROR----')
+        print('----ERROR----')
         print('Saldo Insuficiente!')
     
     elif numero_saques >= 3:
-        print( '----ERROR----')
+        print('----ERROR----')
         print('Atingiu o limite de saques do dia!')
     
     elif valor > limite:
@@ -42,10 +42,10 @@ def sacar(*, valor, saldo, limite, numero_saques):
     elif valor > 0:
         saldo -= valor
         numero_saques += 1
-        extrato = guardar_extrato(extrato= f'{numero_saques}º Saque do dia, sacado R${valor:.2f}')
+        extrato = guardar_extrato(lista_extrato, extrato= f'{numero_saques}º Saque do dia, sacado R${valor:.2f}')
         return saldo, extrato
 
-def guardar_extrato(extrato):
+def guardar_extrato(lista_extrato, extrato):
     lista_extrato.append(extrato)
     return lista_extrato
 
@@ -117,7 +117,7 @@ def main():
             os.system('cls')
             try:
                 valor = float(input('Informe o valor do depósito: R$'))
-                saldo, lista_extrato = depositar(valor, saldo)
+                saldo, lista_extrato = depositar(valor, saldo, lista_extrato)
                 print('== Depósito Realizado com Sucesso! ==')
             except:
                 print('---ERROR---')
@@ -125,10 +125,9 @@ def main():
         
         elif opcao == 's':
             os.system('cls')
-            
             try:
                 valor = float(input('Informe o valor do saque: R$'))
-                resultado = sacar(valor=valor, saldo=saldo, limite=LIMITE_SAQUE, numero_saques=numero_saques_por_dia)
+                resultado = sacar(valor=valor, saldo=saldo, limite=LIMITE_SAQUE, numero_saques=numero_saques_por_dia, lista_extrato= lista_extrato)
                 if resultado is not None:
                     saldo, lista_extrato = resultado
                     numero_saques_por_dia += 1
